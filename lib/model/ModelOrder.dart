@@ -43,6 +43,7 @@ class Order {
       'total_price': totalPrice,
       'order_time': orderTime,
       'event_time': eventTime,
+      'proof_payment' : "placeholder"
     };
 
     http.Response response = await http.post(
