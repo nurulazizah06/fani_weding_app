@@ -1,9 +1,16 @@
+import 'dart:convert';
+
+import 'package:bottom_bar_matu/utils/app_utils.dart';
 import 'package:fani_wedding/component/ComponentButton.dart';
 import 'package:fani_wedding/component/ComponentText.dart';
 import 'package:fani_wedding/component/input.dart';
+import 'package:fani_wedding/controller/AccountController.dart';
+import 'package:fani_wedding/model/ModelAccount.dart';
+import 'package:fani_wedding/page/BaseNavigation.dart';
 import 'package:fani_wedding/page/PageSignIn.dart';
 import 'package:fani_wedding/util/ColorApp.dart';
 import 'package:fani_wedding/util/SizeApp.dart';
+
 import 'package:fani_wedding/util/UtilAPI.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -25,10 +32,13 @@ class _PageEditAkunState extends State<PageEditAkun> {
     });
   }
 
+  final accountController = Get.put(AccountController());
+
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordlamaController = TextEditingController();
   TextEditingController passwordbaruController = TextEditingController();
   TextEditingController noTeleponController = TextEditingController();
+  TextEditingController alamatController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -137,7 +147,7 @@ class _PageEditAkunState extends State<PageEditAkun> {
                   height: 10.h,
                 ),
                 TextField(
-                  controller: noTeleponController,
+                  controller: alamatController,
                   onTap: () {
                     setState(() {});
                   },
@@ -163,106 +173,58 @@ class _PageEditAkunState extends State<PageEditAkun> {
                   ),
                 ),
                 SizedBox(
-                  height: 10.h,
-                ),
-                TextField(
-                  controller: passwordlamaController,
-                  onTap: () {
-                    setState(() {});
-                  },
-                  onChanged: (value) {
-                    // Handle password input
-                  },
-                  obscureText: _obscureText,
-                  decoration: InputDecoration(
-                    label: Text(
-                      "Masukan Kata Sandi Baru",
-                    ),
-                    floatingLabelBehavior: FloatingLabelBehavior.auto,
-                    prefixIcon: Icon(Icons.password),
-                    suffixIcon: GestureDetector(
-                      onTap: _togglePasswordVisibility,
-                      child: Icon(
-                        _obscureText ? Icons.visibility : Icons.visibility_off,
-                      ),
-                    ),
-                    filled: true,
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                      borderSide: BorderSide.none,
-                    ),
-                    disabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                      borderSide: BorderSide.none,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 10.h,
-                ),
-                TextField(
-                  controller: passwordbaruController,
-                  onTap: () {
-                    setState(() {});
-                  },
-                  onChanged: (value) {
-                    // Handle password input
-                  },
-                  obscureText: _obscureText,
-                  decoration: InputDecoration(
-                    label: Text(
-                      "Konfirmasi Kata Sandi Baru",
-                    ),
-                    floatingLabelBehavior: FloatingLabelBehavior.auto,
-                    prefixIcon: Icon(Icons.password),
-                    suffixIcon: GestureDetector(
-                      onTap: _togglePasswordVisibility,
-                      child: Icon(
-                        _obscureText ? Icons.visibility : Icons.visibility_off,
-                      ),
-                    ),
-                    filled: true,
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                      borderSide: BorderSide.none,
-                    ),
-                    disabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                      borderSide: BorderSide.none,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
-                  ),
-                ),
-                SizedBox(
                   height: 40.h,
                 ),
-                ComponentButtonPrimaryOutlineWithFunction(
+                ComponentButtonPrimaryWithFunction(
                     "Simpan",
                     () async => {
-                          UtilApi.register(
+                          updateCustomer(
+                              accountController.account.value.idakun.value
+                                  .toInt(),
                               usernameController.text.toString(),
                               emailController.text.toString(),
                               noTeleponController.text.toString(),
-                              passwordbaruController.text.toString())
+                              alamatController.text.toString()),
+                          Get.toNamed(BaseNavigation.routeName.toString())
                         }),
-                SizedBox(
-                  height: 10.h,
-                ),
-                ComponentButtonPrimaryWithFunction(
-                    "Masuk", () => {Get.toNamed(PageSignIn.routeName)}),
-                SizedBox(
-                  height: 40.h,
-                ),
               ],
             ),
           );
         },
       ),
     );
+  }
+
+  Future<void> updateCustomer(int id, String? name, String? email,
+      String? number, String? address) async {
+    Account accounts = Account(
+        idakun: id.toString(),
+        username: name.toString(),
+        email: email.toString(),
+        phoneNumber: number.toString());
+    accountController.account.value = accounts;
+    accountController.saveAccount();
+    final customerData = {
+      'name': name,
+      'email': email,
+      'number': email,
+      'address': address,
+    };
+    final url =
+        Uri.parse('http://${UtilApi.ipName}/api/customer_accounts-update/$id');
+
+    final response = await http.put(
+      url,
+      body: jsonEncode(customerData),
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    print(response.body + "cok i");
+    if (response.statusCode == 200) {
+      final customer = jsonDecode(response.body);
+      print('Customer updated: $customer');
+    } else {
+      print('Failed to update customer. Error code: ${response.statusCode}');
+    }
   }
 }

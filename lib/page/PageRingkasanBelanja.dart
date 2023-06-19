@@ -505,6 +505,8 @@ class _PageRingkasanBelanjaState extends State<PageRingkasanBelanja> {
                         eventTime: textEditingController.text.toString(),
                       ),
                       order.submitOrder(),
+                      for (int i = 0; i < listKeranjang.length; i++)
+                        {deleteKeranjang(listKeranjang[i].id!.toInt())},
                       Get.snackbar(
                           "Pesanan Berhasil", "Berhasil Melakukan Order"),
                       Get.toNamed(BaseNavigation.routeName.toString())
@@ -521,6 +523,19 @@ class _PageRingkasanBelanjaState extends State<PageRingkasanBelanja> {
         },
       ),
     );
+  }
+
+  Future<void> deleteKeranjang(int id) async {
+    final String url =
+        'http://${UtilApi.ipName}/api/keranjang_hapus/$id'; // Ganti dengan URL API Anda
+    final response = await http.delete(Uri.parse(url));
+    if (response.statusCode == 200) {
+      // Hapus berhasil
+      print('Customer account deleted successfully');
+    } else {
+      // Gagal menghapus
+      print('Failed to delete customer account');
+    }
   }
 
   String getFormattedDateTime() {
@@ -705,7 +720,7 @@ class _DateTextFieldState extends State<DateTextField> {
       },
       decoration: InputDecoration(
         label: ComponentTextPrimaryTittleRegular(
-          teks: "Nama",
+          teks: "Waktu Acara",
         ),
         floatingLabelBehavior: FloatingLabelBehavior.auto,
         prefixIcon: Icon(Icons.abc),

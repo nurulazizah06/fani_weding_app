@@ -39,6 +39,7 @@ class MainApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       initialRoute: BaseNavigation.routeName,
+      defaultTransition: Transition.rightToLeft,
       getPages: [
         GetPage(
             name: AboutUsView.routeName.toString(), page: () => AboutUsView()),

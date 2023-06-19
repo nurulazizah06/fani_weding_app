@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:bottom_bar_matu/utils/app_utils.dart';
 import 'package:fani_wedding/component/ComponentText.dart';
 import 'package:fani_wedding/controller/AccountController.dart';
 import 'package:fani_wedding/model/ModelKeranjang.dart';
@@ -152,6 +153,73 @@ class _PageOrderState extends State<PageOrder> {
   }
 }
 
+class NotaDialog extends StatelessWidget {
+  final String fromName;
+  final String fromAddress;
+  final String fromPhone;
+  final String fromEmail;
+  final String toName;
+  final String toAddress;
+  final String toEmail;
+  final String metodePembayaran;
+  final String productName;
+  final double harga;
+  final int jumlah;
+
+  NotaDialog({
+    required this.fromName,
+    required this.fromAddress,
+    required this.fromPhone,
+    required this.fromEmail,
+    required this.toName,
+    required this.toAddress,
+    required this.toEmail,
+    required this.metodePembayaran,
+    required this.productName,
+    required this.harga,
+    required this.jumlah,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text('Nota Tagihan'),
+      content: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('From:'),
+            Text('$fromName $fromAddress'),
+            Text('Phone: $fromPhone'),
+            Divider(),
+            Text('Email: $fromEmail'),
+            Divider(), // Divider added
+            Text('To:'),
+            Text('$toName $toAddress'),
+            Text('Email: $toEmail'),
+            Divider(), // Divider added
+            Text('Metode Pembayaran: $metodePembayaran'),
+            Divider(), // Divider added
+
+            Text('Total Produk: ${jumlah}'),
+
+            Divider(), // Divider added
+            Text('Total Harga: ${UtilFormat.formatPrice(harga.toInt())}'),
+          ],
+        ),
+      ),
+      actions: [
+        ElevatedButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: Text('Tutup'),
+        ),
+      ],
+    );
+  }
+}
+
 class OrderItem extends StatelessWidget {
   OrderItem(this.order);
   final ModelRiwayatOrder order;
@@ -188,29 +256,66 @@ class OrderItem extends StatelessWidget {
               title: 'Status Pesanan',
               value: order.orderStatus.toString() == "null"
                   ? "pending"
-                  : "setujui"),
+                  : "diterima"),
           _item(context,
               title: 'Status Pembayaran',
               value: order.paymentStatus.toString() == "null"
                   ? "pending"
                   : "setujui"),
-          Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("Bukti Pembayaran"),
-                  ElevatedButton(
-                      onPressed: () {
-                        _pickImage(ImageSource.gallery, order.id.toString(),
-                            order.customerId.toString());
-                      },
-                      child: Text("Upload Bukti Pembayaran"))
-                ],
-              ),
-              Divider(color: XColors.primary),
-            ],
-          )
+          order.paymentStatus.toString() == "setujui"
+              ? Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("Bukti Pembayaran"),
+                        ElevatedButton(
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) => NotaDialog(
+                                  fromName: 'Fani Sulistiowati',
+                                  fromAddress:
+                                      'JJL Mangga Karang Templek Ambulu, Kabputen Jember',
+                                  fromPhone: '08215166129',
+                                  fromEmail: 'FannyManyun26@gmail.com',
+                                  toName: order.name.toString(),
+                                  toAddress: order.address.toString(),
+                                  toEmail: order.email.toString(),
+                                  metodePembayaran: 'BCA :33204677',
+                                  productName: 'List Produk',
+                                  harga: order.totalPrice!.toDouble(),
+                                  jumlah: order.totalProducts.toInt(),
+                                ),
+                              );
+                            },
+                            child: Text("Cetak Nota"))
+                      ],
+                    ),
+                    Divider(color: XColors.primary),
+                  ],
+                )
+              : order.orderStatus.toString() == "null"
+                  ? Container()
+                  : Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("Bukti Pembayaran"),
+                            ElevatedButton(
+                                onPressed: () {
+                                  _pickImage(
+                                      ImageSource.gallery,
+                                      order.id.toString(),
+                                      order.customerId.toString());
+                                },
+                                child: Text("Upload Bukti Pembayaran"))
+                          ],
+                        ),
+                        Divider(color: XColors.primary),
+                      ],
+                    )
         ],
       ),
     );
