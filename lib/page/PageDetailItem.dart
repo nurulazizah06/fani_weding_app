@@ -10,6 +10,7 @@ import 'package:fani_wedding/page/BaseNavigation.dart';
 import 'package:fani_wedding/page/PageDetailLayanan.dart';
 import 'package:fani_wedding/util/ColorApp.dart';
 import 'package:fani_wedding/util/SizeApp.dart';
+import 'package:fani_wedding/util/Util.dart';
 import 'package:fani_wedding/util/UtilAPI.dart';
 import 'package:fani_wedding/util/XColors.dart';
 import 'package:fani_wedding/util/screen.dart';
@@ -56,11 +57,13 @@ class _ProductDetailViewState extends State<ProductDetailView> {
     );
     print(response.body);
     if (response.statusCode == 200) {
-      Get.offAndToNamed(BaseNavigation.routeName.toString());
-      Get.snackbar("Berhasil", "Menamabahkan Keranjang");
+      Navigator.of(context).pop();
+
+      Get.snackbar("Berhasil", "Menambahkan Keranjang");
     } else if (response.statusCode == 201) {
-      Get.offAndToNamed(BaseNavigation.routeName.toString());
-      Get.snackbar("Berhasil", "Menamabahkan Keranjang");
+      Navigator.of(context).pop();
+
+      Get.snackbar("Berhasil", "Menambahkan Keranjang");
     }
   }
 
@@ -128,6 +131,16 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                                     size: SizeApp.SizeTextDescription + 13.sp,
                                   ),
                                   ComponentTextPrimaryDescriptionRegular(
+                                    teks: UtilFormat.formatPrice(
+                                            mproductController
+                                                    .productd.value.price
+                                                    .toInt() *
+                                                qty)
+                                        .toString(),
+                                    colorText: Colors.grey,
+                                    size: SizeApp.SizeTextDescription + 13.sp,
+                                  ),
+                                  ComponentTextPrimaryDescriptionRegular(
                                     teks:
                                         mproductController.productd.value.name,
                                     colorText: Colors.black,
@@ -144,7 +157,7 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                                 GestureDetector(
                                   onTap: () {
                                     setState(() {
-                                      if (qty > 0) {
+                                      if (qty > 1) {
                                         qty--;
                                         totalHarga = qty *
                                             mproductController

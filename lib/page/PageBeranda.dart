@@ -7,6 +7,8 @@ import 'package:fani_wedding/controller/ProductController.dart';
 import 'package:fani_wedding/model/ModelKeranjang.dart';
 import 'package:fani_wedding/page/PageDetailLayanan.dart';
 import 'package:fani_wedding/page/PageKeranjangSaya.dart';
+import 'package:fani_wedding/page/PageProduk.dart';
+import 'package:fani_wedding/page/PageTelusuriProduk.dart';
 import 'package:fani_wedding/util/ColorApp.dart';
 import 'package:fani_wedding/util/SizeApp.dart';
 import 'package:fani_wedding/util/UtilAPI.dart';
@@ -85,7 +87,9 @@ class _PageBerandaState extends State<PageBeranda> {
                             backgroundImage: AssetImage("assets/apps/logo.png"),
                             radius: 20.r,
                           ),
-                          Expanded(child: RoundedSearchBar()),
+                          Expanded(
+                            child: RoundedSearchBar(),
+                          ),
                           IconButton(
                               onPressed: () => {
                                     if (accountController.account.value.email
@@ -149,14 +153,21 @@ class _PageBerandaState extends State<PageBeranda> {
                                 teks: "Acara Impian Anda",
                                 size: SizeApp.SizeTextHeader.sp,
                               ),
-                              Card(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30.r)),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: ComponentTextPrimaryDescriptionRegular(
-                                    teks: "Temukan Disini",
-                                    size: SizeApp.SizeTextHeader.sp,
+                              GestureDetector(
+                                onTap: () {
+                                  Get.toNamed(PageProduk.routeName.toString());
+                                },
+                                child: Card(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(30.r)),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child:
+                                        ComponentTextPrimaryDescriptionRegular(
+                                      teks: "Temukan Disini",
+                                      size: SizeApp.SizeTextHeader.sp,
+                                    ),
                                   ),
                                 ),
                               )
@@ -262,20 +273,32 @@ class WidgetItemLayanan extends StatelessWidget {
 }
 
 class RoundedSearchBar extends StatelessWidget {
+  RoundedSearchBar({this.textEditing});
+  TextEditingController? textEditing;
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      decoration: InputDecoration(
-        fillColor: Colors.white,
-        filled: true,
-        contentPadding: EdgeInsets.symmetric(vertical: 10.0),
-        prefixIcon: Icon(Icons.search),
-        hintText: 'Telusuri Produk',
-        border: OutlineInputBorder(
-          borderSide: BorderSide.none,
-          borderRadius: BorderRadius.circular(20.0),
-        ),
-      ),
+    return GestureDetector(
+      onTap: () {
+        Get.toNamed(PageTelusuriProduk.routeName.toString());
+      },
+      child: Card(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.search,
+                  color: ColorApp.primary,
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Text("Telusuri Produk"),
+              ],
+            ),
+          )),
     );
   }
 }
