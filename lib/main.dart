@@ -5,7 +5,9 @@ import 'package:fani_wedding/page/PageDaftar.dart';
 import 'package:fani_wedding/page/PageDetailItem.dart';
 import 'package:fani_wedding/page/PageDetailLayanan.dart';
 import 'package:fani_wedding/page/PageEditAkun.dart';
+import 'package:fani_wedding/page/PageProduk.dart';
 import 'package:fani_wedding/page/PageRingkasanBelanja.dart';
+import 'package:fani_wedding/page/PageTelusuriProduk.dart';
 import 'package:fani_wedding/page/PageTentangKami.dart';
 import 'package:fani_wedding/util/ColorApp.dart';
 import 'package:flutter/material.dart';
@@ -65,6 +67,11 @@ class MainApp extends StatelessWidget {
         GetPage(
             name: PageRingkasanBelanja.routeName.toString(),
             page: () => PageRingkasanBelanja()),
+        GetPage(
+            name: PageProduk.routeName.toString(), page: () => PageProduk()),
+        GetPage(
+            name: PageTelusuriProduk.routeName.toString(),
+            page: () => PageTelusuriProduk())
       ],
     );
   }
