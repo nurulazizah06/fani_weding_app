@@ -4,7 +4,7 @@ import 'package:get_storage/get_storage.dart';
 
 class AccountController extends GetxController {
   final account =
-      Account(username: '', email: '', phoneNumber: '', idakun: "0").obs;
+      Account(username: '', email: '', phoneNumber: '', idakun: "").obs;
   final storage = GetStorage();
 
   @override

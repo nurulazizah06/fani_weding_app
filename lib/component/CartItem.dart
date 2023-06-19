@@ -1,12 +1,15 @@
 import 'package:fani_wedding/component/ComponentText.dart';
+import 'package:fani_wedding/model/ModelKeranjang.dart';
 import 'package:fani_wedding/util/ColorApp.dart';
 import 'package:fani_wedding/util/SizeApp.dart';
+import 'package:fani_wedding/util/UtilAPI.dart';
 import 'package:fani_wedding/util/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CartItem extends StatefulWidget {
-  const CartItem({super.key});
+  CartItem(this.modelKeranjang);
+  ModelKeranjang modelKeranjang;
 
   @override
   State<CartItem> createState() => _CartItemState();
@@ -14,7 +17,7 @@ class CartItem extends StatefulWidget {
 
 class _CartItemState extends State<CartItem> {
   int qty = 0;
-
+  String imageUrl = 'http://${UtilApi.ipName}/product/';
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -41,12 +44,12 @@ class _CartItemState extends State<CartItem> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ComponentTextPrimaryTittleRegular(
-                  teks: 'Paket Foto',
+                  teks: widget.modelKeranjang.name,
                   size: SizeApp.SizeTextDescription + 13.sp,
                   colorText: Colors.grey,
                 ),
                 ComponentTextPrimaryTittleRegular(
-                  teks: 'Rp. 500.000',
+                  teks: widget.modelKeranjang.price.toString(),
                   size: SizeApp.SizeTextHeader + 10.sp,
                   colorText: Colors.grey,
                 ),
@@ -72,7 +75,6 @@ class _CartItemState extends State<CartItem> {
                     ),
                     const SizedBox(width: Constants.kPaddingM),
                     ComponentTextPrimaryTittleRegular(
-                      teks: qty.toString(),
                       size: SizeApp.SizeTextHeader + 10.sp,
                       colorText: Colors.black,
                     ),
