@@ -3,8 +3,10 @@ import 'dart:convert';
 import 'package:bottom_bar_matu/constants.dart';
 import 'package:bottom_bar_matu/utils/app_utils.dart';
 import 'package:fani_wedding/component/ComponentText.dart';
+import 'package:fani_wedding/component/XAlertDialog.dart';
 import 'package:fani_wedding/controller/AccountController.dart';
 import 'package:fani_wedding/controller/ProductController.dart';
+import 'package:fani_wedding/page/BaseNavigation.dart';
 import 'package:fani_wedding/page/PageDetailLayanan.dart';
 import 'package:fani_wedding/util/ColorApp.dart';
 import 'package:fani_wedding/util/SizeApp.dart';
@@ -37,35 +39,35 @@ class _ProductDetailViewState extends State<ProductDetailView> {
       int? price,
       int? quantity,
       String? image}) async {
-    final url = Uri.parse(
-        'https://${UtilApi.ipName.toString()}/api/cart-add'); // Ganti dengan URL endpoint yang sesuai
-    final Map<String, dynamic> productData = {
-      'customer_id': custId,
-      'pid': pid,
-      'name': '$name',
-      'price': price,
-      'quantity': quantity,
-      'image': '$image',
-    };
+    final url = Uri.parse('http://${UtilApi.ipName}/api/keranjangtambah');
 
-    try {
-      final response = await http.post(
-        url,
-        headers: {'Content-Type': 'application/json'},
-        body: json.encode(productData),
-      );
-      if (response.statusCode == 200) {
-        final responseData = json.decode(response.body);
-        print(responseData['message']); // Pesan respon dari server
-        print(responseData['product']); // Data produk yang disimpan
-      } else {
-        print('Gagal menyimpan produk. Status code: ${response.statusCode}');
-      }
-    } catch (error) {
-      print('Terjadi kesalahan: $error');
+    print("url $url");
+    final response = await http.post(
+      url,
+      body: jsonEncode({
+        'customer_id': custId,
+        'pid': pid,
+        'name': '$name',
+        'price': price,
+        'quantity': quantity,
+        'image': '$image',
+      }),
+      headers: {'Content-Type': 'application/json'},
+    );
+    print(response.body);
+    if (response.statusCode == 200) {
+      Get.offAndToNamed(BaseNavigation.routeName.toString());
+      Get.snackbar("Berhasil", "Menamabahkan Keranjang");
+    } else if (response.statusCode == 201) {
+      Get.offAndToNamed(BaseNavigation.routeName.toString());
+      Get.snackbar("Berhasil", "Menamabahkan Keranjang");
     }
   }
 
+  static Future<void> register(String username, String email,
+      String phoneNumber, String password) async {}
+
+  String imageUrl = 'http://${UtilApi.ipName}/product/';
   @override
   Widget build(BuildContext context) {
     totalHarga = mproductController.productd.value.id!.toInt();
@@ -103,7 +105,9 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(30.r),
                           child: Image.network(
-                            mproductController.productd.value.image.toString(),
+                            imageUrl +
+                                mproductController.productd.value.image
+                                    .toString(),
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -229,11 +233,39 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                 ComponentButtonPrimaryWithFunction(
                     "Masukan Keranjang",
                     () => {
-                          insertProduct(
-                              custId: accountController
-                                  .account.value.idakun.value
-                                  .toInt(),
-                              pid: mproductController.productd.value.id)
+                          if (accountController
+                                  .account.value.email.value.isEmpty ==
+                              true)
+                            {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return XAlertDialog(
+                                    title: "Harap Login Terlebih Dahulu",
+                                    content:
+                                        "Untuk Melakukan Penambahan Keranjang",
+                                  );
+                                },
+                              )
+                            }
+                          else
+                            {
+                              print(
+                                  "cust id ${accountController.account.value.idakun.value.toInt()})"),
+                              insertProduct(
+                                  custId: accountController
+                                      .account.value.idakun.value
+                                      .toInt(),
+                                  pid: mproductController.productd.value.id,
+                                  name: mproductController.productd.value.name
+                                      .toString(),
+                                  price: qty *
+                                      mproductController.productd.value.price
+                                          .toInt(),
+                                  quantity: qty,
+                                  image:
+                                      mproductController.productd.value.image)
+                            },
                         })
               ],
             );

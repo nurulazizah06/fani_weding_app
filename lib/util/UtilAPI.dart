@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 class UtilApi {
-  static String? ipName = "127.0.0.1:8000";
+  static String? ipName = "192.168.218.84:8000";
   static Future<LoginResponse> login(String email, String password) async {
     final url = Uri.parse(
         'http://${UtilApi.ipName}/api/login'); // Ganti dengan URL endpoint login API Anda

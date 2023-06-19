@@ -2,12 +2,17 @@ import 'dart:convert';
 
 import 'package:bottom_bar_matu/utils/app_utils.dart';
 import 'package:fani_wedding/component/ComponentText.dart';
+import 'package:fani_wedding/component/XAlertDialog.dart';
+import 'package:fani_wedding/controller/AccountController.dart';
 import 'package:fani_wedding/controller/ProductController.dart';
+import 'package:fani_wedding/model/ModelKeranjang.dart';
 import 'package:fani_wedding/model/ModelProduct.dart';
 import 'package:fani_wedding/page/PageBeranda.dart';
 import 'package:fani_wedding/page/PageDetailItem.dart';
+import 'package:fani_wedding/page/PageKeranjangSaya.dart';
 import 'package:fani_wedding/util/ColorApp.dart';
 import 'package:fani_wedding/util/SizeApp.dart';
+import 'package:fani_wedding/util/Util.dart';
 import 'package:fani_wedding/util/UtilAPI.dart';
 import 'package:fani_wedding/util/XColors.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +31,22 @@ class PageDetailLayanan extends StatefulWidget {
 
 class _PageDetailLayananState extends State<PageDetailLayanan> {
   final productController = Get.put(ProductController());
+
+  String imageUrl = 'http://${UtilApi.ipName}/product/';
+
+  Future<List<ModelKeranjang>> fetchKeranjangByCustId(String? custId) async {
+    final url = Uri.parse('http://${UtilApi.ipName}/api/keranjang/${custId}');
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      List<dynamic> jsonList = json.decode(response.body);
+      List<ModelKeranjang> productList =
+          jsonList.map((json) => ModelKeranjang.fromJson(json)).toList();
+      return productList;
+    } else {
+      throw Exception('Gagal mengambil data produk.');
+    }
+  }
+
   Future<List<ProductResponse>> fetchProductsByCategory(
       String categoryName) async {
     final url = Uri.parse(
@@ -48,9 +69,21 @@ class _PageDetailLayananState extends State<PageDetailLayanan> {
   void initState() {
     super.initState();
     getDataByCategory();
+    fetchKeranjangByCustId(accountController.account.value.idakun.toString())
+        .then((list) {
+      setState(() {
+        listKeranjang = list;
+      });
+    }).catchError((error) {
+      print('Error: $error');
+    });
   }
 
+  List<ModelKeranjang> listKeranjang = [];
+
   final productControllers = Get.put(ProductController());
+  final accountController = Get.put(AccountController());
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -83,11 +116,51 @@ class _PageDetailLayananState extends State<PageDetailLayanan> {
                               child: RoundedSearchBar(),
                             ),
                             IconButton(
-                                onPressed: () => {},
-                                icon: HeroIcon(
-                                  HeroIcons.shoppingCart,
-                                  color: Colors.white,
-                                ))
+                                onPressed: () => {
+                                      if (accountController.account.value.email
+                                              .value.isEmpty ==
+                                          true)
+                                        {
+                                          showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return XAlertDialog(
+                                                title:
+                                                    "Harap Login Terlebih Dahulu",
+                                                content:
+                                                    "Untuk Mengakses Keranjang",
+                                              );
+                                            },
+                                          )
+                                        }
+                                      else
+                                        {
+                                          Get.toNamed(ProductCartView.routeName
+                                              .toString())
+                                        }
+                                    },
+                                icon: Stack(children: [
+                                  HeroIcon(
+                                    HeroIcons.shoppingCart,
+                                    color: Colors.white,
+                                  ),
+                                  Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Card(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(1.0),
+                                        child: Text(
+                                          "${listKeranjang.length}",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 10,
+                                              color: Colors.red),
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                ]))
                           ],
                         ),
                       ),
@@ -124,7 +197,10 @@ class _PageDetailLayananState extends State<PageDetailLayanan> {
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(20.r),
                                       child: Image.network(
-                                        'https://www.denkapratama.co.id/img/default-placeholder.f065b10c.png',
+                                        imageUrl +
+                                            listProductByKategory[index]
+                                                .image
+                                                .toString(),
                                         fit: BoxFit.cover,
                                       ),
                                     ),
@@ -150,7 +226,7 @@ class _PageDetailLayananState extends State<PageDetailLayanan> {
                                       ),
                                       SizedBox(height: 10.h),
                                       ComponentTextPrimaryDescriptionBold(
-                                        teks: formatCurrency(
+                                        teks: UtilFormat.formatPrice(
                                                 listProductByKategory[index]
                                                     .price
                                                     .toInt())

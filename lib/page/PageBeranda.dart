@@ -1,23 +1,62 @@
+import 'dart:convert';
+
 import 'package:fani_wedding/component/ComponentText.dart';
 import 'package:fani_wedding/component/XAlertDialog.dart';
 import 'package:fani_wedding/controller/AccountController.dart';
 import 'package:fani_wedding/controller/ProductController.dart';
+import 'package:fani_wedding/model/ModelKeranjang.dart';
 import 'package:fani_wedding/page/PageDetailLayanan.dart';
 import 'package:fani_wedding/page/PageKeranjangSaya.dart';
 import 'package:fani_wedding/util/ColorApp.dart';
 import 'package:fani_wedding/util/SizeApp.dart';
+import 'package:fani_wedding/util/UtilAPI.dart';
 import 'package:flutter/material.dart';
 
+import 'package:http/http.dart' as http;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:heroicons/heroicons.dart';
 
-class PageBeranda extends StatelessWidget {
-  final accountController = Get.put(AccountController());
+class PageBeranda extends StatefulWidget {
+  @override
+  State<PageBeranda> createState() => _PageBerandaState();
+}
+
+class _PageBerandaState extends State<PageBeranda> {
   final productController = Get.put(ProductController());
+
+  Future<List<ModelKeranjang>> fetchKeranjangByCustId(String? custId) async {
+    final url = Uri.parse('http://${UtilApi.ipName}/api/keranjang/${custId}');
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      List<dynamic> jsonList = json.decode(response.body);
+      List<ModelKeranjang> productList =
+          jsonList.map((json) => ModelKeranjang.fromJson(json)).toList();
+      return productList;
+    } else {
+      throw Exception('Gagal mengambil data produk.');
+    }
+  }
+
+  final accountController = Get.put(AccountController());
+
+  List<ModelKeranjang> listKeranjang = [];
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+    fetchKeranjangByCustId(accountController.account.value.idakun.toString())
+        .then((list) {
+      setState(() {
+        listKeranjang = list;
+      });
+    }).catchError((error) {
+      print('Error: $error');
+    });
     return Scaffold(
       body: ScreenUtilInit(
         builder: (context, child) {
@@ -71,10 +110,28 @@ class PageBeranda extends StatelessWidget {
                                             .toString())
                                       }
                                   },
-                              icon: HeroIcon(
-                                HeroIcons.shoppingCart,
-                                color: Colors.white,
-                              ))
+                              icon: Stack(children: [
+                                HeroIcon(
+                                  HeroIcons.shoppingCart,
+                                  color: Colors.white,
+                                ),
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Card(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(1.0),
+                                      child: Text(
+                                        "${listKeranjang.length}",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 10,
+                                            color: Colors.red),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              ]))
                         ],
                       ),
                       Row(
