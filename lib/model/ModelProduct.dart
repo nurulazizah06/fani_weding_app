@@ -5,8 +5,8 @@ class ProductResponse {
   String? keterangan;
   String? price;
   String? image;
-  Null? createdAt;
-  Null? updatedAt;
+  String? createdAt;
+  String? updatedAt;
 
   ProductResponse(
       {this.id,

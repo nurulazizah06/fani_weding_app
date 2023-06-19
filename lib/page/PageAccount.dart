@@ -1,7 +1,10 @@
 import 'package:fani_wedding/component/ComponentText.dart';
 import 'package:fani_wedding/controller/AccountController.dart';
+import 'package:fani_wedding/page/PageEditAkun.dart';
 import 'package:fani_wedding/page/PageSignIn.dart';
+import 'package:fani_wedding/page/PageTentangKami.dart';
 import 'package:fani_wedding/util/ColorApp.dart';
+import 'package:fani_wedding/util/UtilAPI.dart';
 import 'package:fani_wedding/util/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -16,10 +19,11 @@ class PageAccount extends StatefulWidget {
 
 class _PageAccountState extends State<PageAccount> {
   final accountController = Get.put(AccountController());
-
+  String imageUrl = 'http://${UtilApi.ipName}/product/';
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+
     return Scaffold(
       body: ScreenUtilInit(
         builder: (context, child) {
@@ -95,7 +99,10 @@ class _PageAccountState extends State<PageAccount> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   TextButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Get.toNamed(
+                                          PageEditAkun.routeName.toString());
+                                    },
                                     child: Text(
                                       'Edit Profil',
                                       style:
@@ -104,7 +111,10 @@ class _PageAccountState extends State<PageAccount> {
                                   ),
                                   Divider(thickness: 2),
                                   TextButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Get.toNamed(
+                                          AboutUsView.routeName.toString());
+                                    },
                                     child: Text(
                                       'Tentang Kami',
                                       style:
