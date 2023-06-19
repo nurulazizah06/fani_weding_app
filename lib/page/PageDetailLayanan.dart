@@ -220,7 +220,7 @@ class _PageDetailLayananState extends State<PageDetailLayanan> {
                                       ),
                                       ComponentTextPrimaryDescriptionRegularOverflow(
                                         teks: listProductByKategory[index]
-                                            .keterangan
+                                            .name
                                             .toString(),
                                         // style: Theme.of(context).textTheme.bodySmall,
                                       ),

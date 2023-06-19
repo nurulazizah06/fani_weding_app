@@ -60,7 +60,6 @@ class _PageOrderState extends State<PageOrder> {
   }
 
   List<ModelRiwayatOrder> listRiwayat = [];
-
   List<ModelKeranjang> listKeranjang = [];
   final controllerAccount = Get.put(AccountController());
   @override

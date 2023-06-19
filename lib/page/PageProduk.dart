@@ -7,6 +7,7 @@ import 'package:fani_wedding/controller/AccountController.dart';
 import 'package:fani_wedding/controller/ProductController.dart';
 import 'package:fani_wedding/model/ModelKeranjang.dart';
 import 'package:fani_wedding/model/ModelProduct.dart';
+import 'package:fani_wedding/page/BaseNavigation.dart';
 import 'package:fani_wedding/page/PageBeranda.dart';
 import 'package:fani_wedding/page/PageDetailItem.dart';
 import 'package:fani_wedding/page/PageKeranjangSaya.dart';
@@ -100,10 +101,6 @@ class _PageProdukState extends State<PageProduk> {
                             top: 50, bottom: 20, left: 10, right: 10),
                         child: Row(
                           children: [
-                            IconButton(
-                              icon: Icon(Icons.arrow_back),
-                              onPressed: () => {Navigator.of(context).pop()},
-                            ),
                             Expanded(
                               child: RoundedSearchBar(),
                             ),
@@ -212,7 +209,7 @@ class _PageProdukState extends State<PageProduk> {
                                       ),
                                       ComponentTextPrimaryDescriptionRegularOverflow(
                                         teks: listProductByKategory[index]
-                                            .keterangan
+                                            .name
                                             .toString(),
                                         // style: Theme.of(context).textTheme.bodySmall,
                                       ),
@@ -252,39 +249,6 @@ class _PageProdukState extends State<PageProduk> {
     final formatCurrency = NumberFormat.currency(locale: 'id_ID', symbol: 'Rp');
     return formatCurrency.format(amount);
   }
-
-  List<Product> productList = [
-    Product(
-      'https://www.denkapratama.co.id/img/default-placeholder.f065b10c.png',
-      'Deskripsi Produk 1',
-      'Produk 1',
-      100,
-    ),
-    Product(
-      'https://www.denkapratama.co.id/img/default-placeholder.f065b10c.png',
-      'Deskripsi Produk 2',
-      'Produk 2',
-      200,
-    ),
-    Product(
-      'https://www.denkapratama.co.id/img/default-placeholder.f065b10c.png',
-      'Deskripsi Produk 3',
-      'Produk 3',
-      300,
-    ),
-    Product(
-      'https://www.denkapratama.co.id/img/default-placeholder.f065b10c.png',
-      'Deskripsi Produk 4',
-      'Produk 4',
-      400,
-    ),
-    Product(
-      'https://www.denkapratama.co.id/img/default-placeholder.f065b10c.png',
-      'Deskripsi Produk 5',
-      'Produk 5',
-      500,
-    ),
-  ];
 }
 
 class Product {
@@ -343,10 +307,7 @@ class ProductItem extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                   SizedBox(height: 10.h),
-                  Text(
-                    'Rp. 1.000.000',
-                    style: Theme.of(context).textTheme.headline6,
-                  ),
+                  //  Text('Rp. 1.000.000', style: TextStyle(color: Colors.black)),
                 ],
               ),
             ),
