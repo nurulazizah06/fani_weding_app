@@ -261,8 +261,8 @@ class OrderItem extends StatelessWidget {
               title: 'Status Pembayaran',
               value: order.paymentStatus.toString() == "null"
                   ? "pending"
-                  : "setujui"),
-          order.paymentStatus.toString() == "setujui"
+                  : "lunas"),
+          order.paymentStatus.toString() == "Lunas"
               ? Column(
                   children: [
                     Row(

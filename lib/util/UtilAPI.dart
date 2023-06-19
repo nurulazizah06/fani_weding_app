@@ -5,7 +5,10 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 class UtilApi {
-  static String? ipName = "192.168.218.84:8000";
+  static String? ipName = "192.168.1.18:8000"; //wajib setiap mau jalanin
+  /*
+  wajib ganti ipname , caranya ketik cm d terus copy ipv4 contoh : 192.168.1.18:8000
+  */
   static Future<LoginResponse> login(String email, String password) async {
     final url = Uri.parse(
         'http://${UtilApi.ipName}/api/login'); // Ganti dengan URL endpoint login API Anda
