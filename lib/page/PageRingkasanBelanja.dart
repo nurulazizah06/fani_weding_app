@@ -204,7 +204,10 @@ class _PageRingkasanBelanjaState extends State<PageRingkasanBelanja> {
                                 style: ButtonStyle(
                                     backgroundColor:
                                         MaterialStatePropertyAll(Colors.white)),
-                                onPressed: () {},
+                                onPressed: () {
+                                  Get.toNamed(
+                                      ProductCartView.routeName.toString());
+                                },
                                 child: ComponentTextPrimaryDescriptionRegular(
                                   teks: "Lihat Keranjang",
                                   size: SizeApp.SizeTextHeader.sp,

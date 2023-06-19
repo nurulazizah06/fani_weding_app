@@ -3,10 +3,12 @@ import 'dart:io';
 
 import 'package:bottom_bar_matu/utils/app_utils.dart';
 import 'package:fani_wedding/component/ComponentText.dart';
+import 'package:fani_wedding/component/XAlertDialog.dart';
 import 'package:fani_wedding/controller/AccountController.dart';
 import 'package:fani_wedding/model/ModelKeranjang.dart';
 
 import 'package:fani_wedding/model/ModelRIwayat.dart';
+import 'package:fani_wedding/page/PageKeranjangSaya.dart';
 import 'package:fani_wedding/util/ColorApp.dart';
 import 'package:fani_wedding/util/SizeApp.dart';
 import 'package:fani_wedding/util/Util.dart';
@@ -109,7 +111,27 @@ class _PageOrderState extends State<PageOrder> {
                         child: Container(),
                       ),
                       IconButton(
-                          onPressed: () => {},
+                          onPressed: () => {
+                                if (controllerAccount
+                                        .account.value.email.value.isEmpty ==
+                                    true)
+                                  {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return XAlertDialog(
+                                          title: "Harap Login Terlebih Dahulu",
+                                          content: "Untuk Mengakses Keranjang",
+                                        );
+                                      },
+                                    )
+                                  }
+                                else
+                                  {
+                                    Get.toNamed(
+                                        ProductCartView.routeName.toString())
+                                  }
+                              },
                           icon: Stack(children: [
                             HeroIcon(
                               HeroIcons.shoppingCart,
