@@ -42,6 +42,7 @@ class _PageSignInState extends State<PageSignIn> {
       print('Username: ${loginResponse.username}');
       print('Email: ${loginResponse.email}');
       print('Phone Number: ${loginResponse.phoneNumber}');
+      print("id Akun:  ${loginResponse.idakun}");
       Account accounts = Account(
           idakun: loginResponse.idakun,
           username: loginResponse.username,
