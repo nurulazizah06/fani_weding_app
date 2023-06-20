@@ -153,12 +153,7 @@ class _PageRingkasanBelanjaState extends State<PageRingkasanBelanja> {
                                       colorText: Colors.white,
                                       size: SizeApp.SizeTextHeader.sp,
                                     ),
-                                    ComponentTextPrimaryTittleBold(
-                                      teks:
-                                          "X ${listKeranjang[index].quantity.toString()}",
-                                      colorText: Colors.white,
-                                      size: SizeApp.SizeTextHeader.sp,
-                                    )
+                                    
                                   ],
                                 );
                               },
@@ -728,7 +723,7 @@ class _DateTextFieldState extends State<DateTextField> {
           teks: "Waktu Acara",
         ),
         floatingLabelBehavior: FloatingLabelBehavior.auto,
-        prefixIcon: Icon(Icons.abc),
+        prefixIcon: Icon(Icons.calendar_today ),
         filled: true,
         enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20.0),
