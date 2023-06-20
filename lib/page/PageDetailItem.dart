@@ -55,6 +55,8 @@ class _ProductDetailViewState extends State<ProductDetailView> {
       }),
       headers: {'Content-Type': 'application/json'},
     );
+
+    // notifikasi
     print(response.body);
     if (response.statusCode == 200) {
       Navigator.of(context).pop();
@@ -80,7 +82,7 @@ class _ProductDetailViewState extends State<ProductDetailView> {
           builder: (context, child) {
             return Column(
               children: [
-                Row(
+                Row( // button kembali pada app bar
                   children: [
                     IconButton(
                         onPressed: () {
@@ -90,7 +92,7 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                           Icons.arrow_back,
                           color: XColors.primary,
                         )),
-                    Center(
+                    Center( // nama produk pada app bar
                       child: ComponentTextPrimaryDescriptionRegular(
                         teks: mproductController.productd.value.name.toString(),
                         colorText: Colors.black,
@@ -99,7 +101,7 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                     ),
                   ],
                 ),
-                Expanded(
+                Expanded( // gambar produk
                   child: ListView(
                     children: [
                       SizedBox(
@@ -124,12 +126,13 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
+                                children: [ //kategori produk
                                   ComponentTextPrimaryDescriptionRegular(
                                     teks: mproductController.kategoryName.value,
                                     colorText: Colors.grey,
                                     size: SizeApp.SizeTextDescription + 13.sp,
                                   ),
+                                  // harga produk
                                   ComponentTextPrimaryDescriptionRegular(
                                     teks: UtilFormat.formatPrice(
                                             mproductController
@@ -140,6 +143,7 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                                     colorText: Colors.grey,
                                     size: SizeApp.SizeTextDescription + 13.sp,
                                   ),
+                                  // nama product
                                   ComponentTextPrimaryDescriptionRegular(
                                     teks:
                                         mproductController.productd.value.name,
@@ -152,7 +156,7 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                             SizedBox(
                               height: 15.h,
                             ),
-                            Row(
+                            Row( // memberi fungsi pada icon -
                               children: [
                                 GestureDetector(
                                   onTap: () {
@@ -167,7 +171,7 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                                       }
                                     });
                                   },
-                                  child: Card(
+                                  child: Card( // button icon -
                                     color: ColorApp.PrimaryColor,
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
@@ -187,12 +191,14 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                                     ),
                                   ),
                                 ),
+                                // jumlah produk
                                 SizedBox(width: 10.w),
                                 ComponentTextPrimaryDescriptionRegular(
                                   teks: qty.toString(),
                                   size: SizeApp.SizeTextDescription + 13.sp,
                                   colorText: Colors.black,
                                 ),
+                                // fungsi icon +
                                 SizedBox(width: 10.w),
                                 GestureDetector(
                                   onTap: () {
@@ -233,7 +239,7 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                       SizedBox(
                         height: 15.h,
                       ),
-                      Padding(
+                      Padding( // deskripsi produk
                         padding: EdgeInsets.symmetric(horizontal: 20.h),
                         child: ComponentTextPrimaryDescriptionRegular(
                           teks: mproductController.productd.value.keterangan
@@ -243,6 +249,7 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                     ],
                   ),
                 ),
+                // button masukan keranjang
                 ComponentButtonPrimaryWithFunction(
                     "Masukan Keranjang",
                     () => {

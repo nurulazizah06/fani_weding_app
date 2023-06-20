@@ -24,12 +24,14 @@ import 'package:heroicons/heroicons.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
+// membuat class pageproduk
 class PageProduk extends StatefulWidget {
   static String? routeName = "/PageProduk";
   @override
   State<PageProduk> createState() => _PageProdukState();
 }
 
+// mengambil data produk menggunakan API
 class _PageProdukState extends State<PageProduk> {
   String imageUrl = 'http://${UtilApi.ipName}/product/';
 
@@ -48,6 +50,7 @@ class _PageProdukState extends State<PageProduk> {
     }
   }
 
+// mengambil data keranjang menggunakan API
   Future<List<ModelKeranjang>> fetchKeranjangByCustId(String? custId) async {
     final url = Uri.parse('http://${UtilApi.ipName}/api/keranjang/${custId}');
     final response = await http.get(url);
@@ -61,10 +64,12 @@ class _PageProdukState extends State<PageProduk> {
     }
   }
 
+// mengambil data dari controller
   final productController = Get.put(ProductController());
 
   final accountController = Get.put(AccountController());
 
+// mengisi dan memperbaharui keranjang jika ada product yang ditambahkan
   List<ModelKeranjang> listKeranjang = [];
   @override
   void initState() {
@@ -102,10 +107,10 @@ class _PageProdukState extends State<PageProduk> {
                         child: Row(
                           children: [
                             Expanded(
-                              child: RoundedSearchBar(),
+                              child: RoundedSearchBar(), //search bar
                             ),
                             IconButton(
-                                onPressed: () => {
+                                onPressed: () => { //memberi fungsi ketika sesudah/sebelum login
                                       if (accountController.account.value.email
                                               .value.isEmpty ==
                                           true)
@@ -128,17 +133,17 @@ class _PageProdukState extends State<PageProduk> {
                                               .toString())
                                         }
                                     },
-                                icon: Stack(children: [
+                                icon: Stack(children: [ //icon keranjang
                                   HeroIcon(
                                     HeroIcons.shoppingCart,
                                     color: Colors.white,
                                   ),
-                                  Align(
+                                  Align( //memposisikan icon
                                     alignment: Alignment.centerRight,
                                     child: Card(
                                       child: Padding(
                                         padding: const EdgeInsets.all(1.0),
-                                        child: Text(
+                                        child: Text( // memberi icon, jumlah list dalam keranjang
                                           "${listKeranjang.length}",
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
@@ -154,7 +159,7 @@ class _PageProdukState extends State<PageProduk> {
                         ),
                       ),
                     ),
-                    Padding(
+                    Padding( // memberi judul Produk
                       padding: const EdgeInsets.all(8.0),
                       child: ComponentTextPrimaryTittleBold(
                         teks:
@@ -163,19 +168,19 @@ class _PageProdukState extends State<PageProduk> {
                         textAlign: TextAlign.start,
                       ),
                     ),
-                    Expanded(
+                    Expanded( //membuat grid item
                         child: GridView.builder(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount( //menentukan tata letak
                           crossAxisCount: 2, childAspectRatio: 0.8),
-                      itemCount: listProductByKategory!.length,
+                      itemCount: listProductByKategory!.length, //panjangnya sesuai jumlah produk
                       itemBuilder: (context, index) {
                         return GestureDetector(
-                          onTap: () {
+                          onTap: () { //action pada produk, menuju detail product
                             Get.toNamed(ProductDetailView.routeName.toString());
                             productController.productd.value =
                                 listProductByKategory[index];
                           },
-                          child: Card(
+                          child: Card( //memuat gambar product, diambil menggunakan API
                             elevation: 0,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -200,13 +205,14 @@ class _PageProdukState extends State<PageProduk> {
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
-                                    children: [
+                                    children: [ //menampilkan kategori produk
                                       ComponentTextPrimaryDescriptionRegular(
                                         teks: listProductByKategory[index]
                                             .category
                                             .toString(),
                                         colorText: XColors.grey_60,
                                       ),
+                                      // menampilkan nama produk
                                       ComponentTextPrimaryDescriptionRegularOverflow(
                                         teks: listProductByKategory[index]
                                             .name
@@ -214,6 +220,7 @@ class _PageProdukState extends State<PageProduk> {
                                         // style: Theme.of(context).textTheme.bodySmall,
                                       ),
                                       SizedBox(height: 10.h),
+                                      //menampilkan harga produk
                                       ComponentTextPrimaryDescriptionBold(
                                         teks: UtilFormat.formatPrice(
                                                 listProductByKategory[index]
@@ -245,13 +252,14 @@ class _PageProdukState extends State<PageProduk> {
     );
   }
 
+// format mata uang Rp
   String formatCurrency(int? amount) {
     final formatCurrency = NumberFormat.currency(locale: 'id_ID', symbol: 'Rp');
     return formatCurrency.format(amount);
   }
 }
 
-class Product {
+class Product { //mendeklarasikan isi dari produk
   String? imageURL;
   String? desc;
   String? tittle;
@@ -259,61 +267,61 @@ class Product {
   Product(this.imageURL, this.desc, this.tittle, this.harga);
 }
 
-class ProductItem extends StatelessWidget {
-  ProductItem(this.product);
-  final Product product;
+// class ProductItem extends StatelessWidget {
+//   ProductItem(this.product);
+//   final Product product;
 
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        // Navigator.of(context).push(
-        //   MaterialPageRoute(
-        //     builder: (ctx) => ProductDetailView(
-        //       product: product,
-        //     ),
-        //   ),
-        // );
-      },
-      child: Card(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: SizedBox(
-                width: double.infinity,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(20.r),
-                  child: Image.network(
-                    'https://www.denkapratama.co.id/img/default-placeholder.f065b10c.png',
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Extra Wedding',
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                  Text(
-                    product.tittle.toString(),
-                    // style: Theme.of(context).textTheme.bodySmall,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  SizedBox(height: 10.h),
-                  //  Text('Rp. 1.000.000', style: TextStyle(color: Colors.black)),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return GestureDetector(
+//       onTap: () {
+//         // Navigator.of(context).push(
+//         //   MaterialPageRoute(
+//         //     builder: (ctx) => ProductDetailView(
+//         //       product: product,
+//         //     ),
+//         //   ),
+//         // );
+//       },
+//       child: Card(
+//         child: Column(
+//           crossAxisAlignment: CrossAxisAlignment.start,
+//           children: [
+//             Expanded(
+//               child: SizedBox(
+//                 width: double.infinity,
+//                 child: ClipRRect(
+//                   borderRadius: BorderRadius.circular(20.r),
+//                   child: Image.network(
+//                     'https://www.denkapratama.co.id/img/default-placeholder.f065b10c.png',
+//                     fit: BoxFit.cover,
+//                   ),
+//                 ),
+//               ),
+//             ),
+//             Padding(
+//               padding: const EdgeInsets.all(8.0),
+//               child: Column(
+//                 crossAxisAlignment: CrossAxisAlignment.start,
+//                 children: [
+//                   Text(
+//                     'Extra Wedding',
+//                     style: Theme.of(context).textTheme.bodySmall,
+//                   ),
+//                   Text(
+//                     product.tittle.toString(),
+//                     // style: Theme.of(context).textTheme.bodySmall,
+//                     maxLines: 1,
+//                     overflow: TextOverflow.ellipsis,
+//                   ),
+//                   SizedBox(height: 10.h),
+//                   //  Text('Rp. 1.000.000', style: TextStyle(color: Colors.black)),
+//                 ],
+//               ),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }

@@ -118,6 +118,7 @@ class _PageTelusuriProdukState extends State<PageTelusuriProduk> {
                               borderRadius: BorderRadius.circular(20.0),
                             ),
                           ),
+                          // memberi fungsi pada search bar
                           onChanged: (value) {
                             fetchProductsByName(value.toString()).then((value) {
                               setState(() {
@@ -259,7 +260,7 @@ class RoundedSearchBarTelusuri extends StatelessWidget {
   TextEditingController? textEditing;
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextField( // search bar
       controller: textEditing,
       decoration: InputDecoration(
         fillColor: Colors.white,
@@ -284,61 +285,61 @@ class Product {
   Product(this.imageURL, this.desc, this.tittle, this.harga);
 }
 
-class ProductItem extends StatelessWidget {
-  ProductItem(this.product);
-  final Product product;
+// class ProductItem extends StatelessWidget {
+//   ProductItem(this.product);
+//   final Product product;
 
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        // Navigator.of(context).push(
-        //   MaterialPageRoute(
-        //     builder: (ctx) => ProductDetailView(
-        //       product: product,
-        //     ),
-        //   ),
-        // );
-      },
-      child: Card(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: SizedBox(
-                width: double.infinity,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(20.r),
-                  child: Image.network(
-                    'https://www.denkapratama.co.id/img/default-placeholder.f065b10c.png',
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Extra Wedding',
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                  Text(
-                    product.tittle.toString(),
-                    // style: Theme.of(context).textTheme.bodySmall,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  SizedBox(height: 10.h),
-                  //  Text('Rp. 1.000.000', style: TextStyle(color: Colors.black)),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return GestureDetector(
+//       onTap: () {
+//         // Navigator.of(context).push(
+//         //   MaterialPageRoute(
+//         //     builder: (ctx) => ProductDetailView(
+//         //       product: product,
+//         //     ),
+//         //   ),
+//         // );
+//       },
+//       child: Card(
+//         child: Column(
+//           crossAxisAlignment: CrossAxisAlignment.start,
+//           children: [
+//             Expanded(
+//               child: SizedBox(
+//                 width: double.infinity,
+//                 child: ClipRRect(
+//                   borderRadius: BorderRadius.circular(20.r),
+//                   child: Image.network(
+//                     'https://www.denkapratama.co.id/img/default-placeholder.f065b10c.png',
+//                     fit: BoxFit.cover,
+//                   ),
+//                 ),
+//               ),
+//             ),
+//             Padding(
+//               padding: const EdgeInsets.all(8.0),
+//               child: Column(
+//                 crossAxisAlignment: CrossAxisAlignment.start,
+//                 children: [
+//                   Text(
+//                     'Extra Wedding',
+//                     style: Theme.of(context).textTheme.bodySmall,
+//                   ),
+//                   Text(
+//                     product.tittle.toString(),
+//                     // style: Theme.of(context).textTheme.bodySmall,
+//                     maxLines: 1,
+//                     overflow: TextOverflow.ellipsis,
+//                   ),
+//                   SizedBox(height: 10.h),
+//                   //  Text('Rp. 1.000.000', style: TextStyle(color: Colors.black)),
+//                 ],
+//               ),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
