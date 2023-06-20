@@ -241,9 +241,17 @@ class NotaDialog extends StatelessWidget {
   }
 }
 
-class OrderItem extends StatelessWidget {
+class OrderItem extends StatefulWidget {
   OrderItem(this.order);
   final ModelRiwayatOrder order;
+
+  @override
+  State<OrderItem> createState() => _OrderItemState();
+}
+
+class _OrderItemState extends State<OrderItem> {
+  bool statusUpload = false;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -257,33 +265,43 @@ class OrderItem extends StatelessWidget {
       ),
       child: Column(
         children: [
-          _item(context, title: 'Nama', value: order.name.toString()),
-          _item(context, title: 'Email', value: order.email.toString()),
+          _item(context, title: 'Nama', value: widget.order.name.toString()),
+          _item(context, title: 'Email', value: widget.order.email.toString()),
           _item(context,
-              title: 'Nomor Telepon', value: order.number.toString()),
-          _item(context, title: 'Alamat', value: order.address.toString()),
+              title: 'Nomor Telepon', value: widget.order.number.toString()),
           _item(context,
-              title: 'Tanggal Order', value: order.orderTime.toString()),
+              title: 'Alamat', value: widget.order.address.toString()),
           _item(context,
-              title: 'Waktu Acara', value: order.eventTime.toString()),
+              title: 'Tanggal Order', value: widget.order.orderTime.toString()),
           _item(context,
-              title: 'Total Produk', value: order.totalProducts.toString()),
+              title: 'Waktu Acara', value: widget.order.eventTime.toString()),
+          _item(context,
+              title: 'Total Produk',
+              value: widget.order.totalProducts.toString()),
           _item(context,
               title: 'Total Pembayaran',
-              value: UtilFormat.formatPrice(order.totalPrice!.toInt())),
+              value: UtilFormat.formatPrice(widget.order.totalPrice!.toInt())),
           _item(context,
-              title: 'Metode Pembayaran', value: order.method.toString()),
-          _item(context,
-              title: 'Status Pesanan',
-              value: order.orderStatus.toString() == "null"
-                  ? "pending"
-                  : "diterima"),
+              title: 'Metode Pembayaran',
+              value: widget.order.method.toString()),
+          widget.order.orderStatus.toString() == "Ditolak"
+              ? _item(context,
+                  title: 'Status Pesanan',
+                  value: widget.order.orderStatus.toString() == "null"
+                      ? "ditolak"
+                      : "ditolak")
+              : _item(context,
+                  title: 'Status Pesanan',
+                  value: widget.order.orderStatus.toString() == "null"
+                      ? "pending"
+                      : "diterima"),
           _item(context,
               title: 'Status Pembayaran',
-              value: order.paymentStatus.toString() == "null"
+              value: widget.order.paymentStatus.toString() == "null"
                   ? "pending"
-                  : "lunas"),
-          order.paymentStatus.toString() == "Lunas"
+                  : widget.order.paymentStatus.toString()),
+          widget.order.paymentStatus.toString() == "Lunas" &&
+                  widget.order.paymentStatus.toString() != "Belum lunas"
               ? Column(
                   children: [
                     Row(
@@ -300,13 +318,13 @@ class OrderItem extends StatelessWidget {
                                       'JJL Mangga Karang Templek Ambulu, Kabputen Jember',
                                   fromPhone: '08215166129',
                                   fromEmail: 'FannyManyun26@gmail.com',
-                                  toName: order.name.toString(),
-                                  toAddress: order.address.toString(),
-                                  toEmail: order.email.toString(),
+                                  toName: widget.order.name.toString(),
+                                  toAddress: widget.order.address.toString(),
+                                  toEmail: widget.order.email.toString(),
                                   metodePembayaran: 'BCA :33204677',
                                   productName: 'List Produk',
-                                  harga: order.totalPrice!.toDouble(),
-                                  jumlah: order.totalProducts.toInt(),
+                                  harga: widget.order.totalPrice!.toDouble(),
+                                  jumlah: widget.order.totalProducts.toInt(),
                                 ),
                               );
                             },
@@ -316,22 +334,45 @@ class OrderItem extends StatelessWidget {
                     Divider(color: XColors.primary),
                   ],
                 )
-              : order.orderStatus.toString() == "null"
-                  ? Container()
+              : widget.order.orderStatus.toString() == "null" ||
+                      widget.order.orderStatus.toString() == "Ditolak"
+                  ? Container(
+                      color: Colors.red,
+                      child: widget.order.orderStatus.toString() == "Ditolak"
+                          ? Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text("Ditolak"),
+                            )
+                          : Text(""),
+                    )
                   : Column(
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text("Bukti Pembayaran"),
-                            ElevatedButton(
-                                onPressed: () {
-                                  _pickImage(
-                                      ImageSource.gallery,
-                                      order.id.toString(),
-                                      order.customerId.toString());
-                                },
-                                child: Text("Upload Bukti Pembayaran"))
+                            widget.order.proofPayment != "placeholder"
+                                ? ElevatedButton(
+                                    onPressed: () {
+                                      Get.snackbar(
+                                          "Notifikasi",
+                                          widget.order.paymentStatus ==
+                                                  "Belum Lunas"
+                                              ? "Mohon Order Kembali , Dana Yang Anda Transfer Akan Kami Kembalikan Segera."
+                                              : "Harap Tunggu Validasi Pembayaran Dari Admin");
+                                    },
+                                    child: Text(widget.order.paymentStatus ==
+                                            "Belum Lunas"
+                                        ? "Harap Order Lagi"
+                                        : "Upload Berhasil"))
+                                : ElevatedButton(
+                                    onPressed: () {
+                                      _pickImage(
+                                          ImageSource.gallery,
+                                          widget.order.id.toString(),
+                                          widget.order.customerId.toString());
+                                    },
+                                    child: Text("Upload Bukti Pembayaran"))
                           ],
                         ),
                         Divider(color: XColors.primary),
@@ -343,7 +384,9 @@ class OrderItem extends StatelessWidget {
   }
 
   File? _image;
+
   String? _namaFile;
+
   Future _pickImage(ImageSource source, String idOrder, String custId) async {
     try {
       final image = await ImagePicker().pickImage(source: source);
@@ -357,6 +400,10 @@ class OrderItem extends StatelessWidget {
       //     Path.join(Path.dirname(_image.toString()), namaFileBaru);
       _namaFile = Path.basename(_image.toString());
       if (_namaFile != null) {
+        setState(() {
+          print("status true");
+          statusUpload = true;
+        });
         sendRequestWithFile(file: img, id_order: idOrder, custId: custId);
       }
       // Navigator.of(context).pop();

@@ -42,8 +42,7 @@ class _ProductCartViewState extends State<ProductCartView> {
   List<ModelKeranjang> listKeranjang = [];
 
   Future<void> updateCart(ModelKeranjang modelKeranjang, String custId) async {
-    final String url =
-        'http://${UtilApi.ipName}/api/keranjangupdate'; // Ganti dengan URL API Anda
+    final String url = 'http://${UtilApi.ipName}/api/keranjangupdate';
 
     Map<String, dynamic> data = {
       'id': modelKeranjang.id,
@@ -225,7 +224,10 @@ class _ProductCartViewState extends State<ProductCartView> {
                                               listKeranjang[index]
                                                   .setPrice(totHargaNow);
                                               updateCart(
-                                                  listKeranjang[index], "1");
+                                                  listKeranjang[index],
+                                                  controllerAccount
+                                                      .account.value.idakun
+                                                      .toString());
                                             }
                                           });
                                         },
@@ -264,7 +266,10 @@ class _ProductCartViewState extends State<ProductCartView> {
                                                 .setPrice(totHargaNow);
 
                                             updateCart(
-                                                listKeranjang[index], "1");
+                                                listKeranjang[index],
+                                                controllerAccount
+                                                    .account.value.idakun
+                                                    .toString());
                                           });
                                         },
                                       ),

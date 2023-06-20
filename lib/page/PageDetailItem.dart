@@ -82,7 +82,8 @@ class _ProductDetailViewState extends State<ProductDetailView> {
           builder: (context, child) {
             return Column(
               children: [
-                Row( // button kembali pada app bar
+                Row(
+                  // button kembali pada app bar
                   children: [
                     IconButton(
                         onPressed: () {
@@ -92,7 +93,8 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                           Icons.arrow_back,
                           color: XColors.primary,
                         )),
-                    Center( // nama produk pada app bar
+                    Center(
+                      // nama produk pada app bar
                       child: ComponentTextPrimaryDescriptionRegular(
                         teks: mproductController.productd.value.name.toString(),
                         colorText: Colors.black,
@@ -101,7 +103,8 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                     ),
                   ],
                 ),
-                Expanded( // gambar produk
+                Expanded(
+                  // gambar produk
                   child: ListView(
                     children: [
                       SizedBox(
@@ -126,7 +129,8 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [ //kategori produk
+                                children: [
+                                  //kategori produk
                                   ComponentTextPrimaryDescriptionRegular(
                                     teks: mproductController.kategoryName.value,
                                     colorText: Colors.grey,
@@ -156,7 +160,8 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                             SizedBox(
                               height: 15.h,
                             ),
-                            Row( // memberi fungsi pada icon -
+                            Row(
+                              // memberi fungsi pada icon -
                               children: [
                                 GestureDetector(
                                   onTap: () {
@@ -171,7 +176,8 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                                       }
                                     });
                                   },
-                                  child: Card( // button icon -
+                                  child: Card(
+                                    // button icon -
                                     color: ColorApp.PrimaryColor,
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
@@ -239,7 +245,8 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                       SizedBox(
                         height: 15.h,
                       ),
-                      Padding( // deskripsi produk
+                      Padding(
+                        // deskripsi produk
                         padding: EdgeInsets.symmetric(horizontal: 20.h),
                         child: ComponentTextPrimaryDescriptionRegular(
                           teks: mproductController.productd.value.keterangan
@@ -250,43 +257,46 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                   ),
                 ),
                 // button masukan keranjang
-                ComponentButtonPrimaryWithFunction(
-                    "Masukan Keranjang",
-                    () => {
-                          if (accountController
-                                  .account.value.email.value.isEmpty ==
-                              true)
-                            {
-                              showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return XAlertDialog(
-                                    title: "Harap Login Terlebih Dahulu",
-                                    content:
-                                        "Untuk Melakukan Penambahan Keranjang",
-                                  );
-                                },
-                              )
-                            }
-                          else
-                            {
-                              print(
-                                  "cust id ${accountController.account.value.idakun.value.toInt()})"),
-                              insertProduct(
-                                  custId: accountController
-                                      .account.value.idakun.value
-                                      .toInt(),
-                                  pid: mproductController.productd.value.id,
-                                  name: mproductController.productd.value.name
-                                      .toString(),
-                                  price: qty *
-                                      mproductController.productd.value.price
-                                          .toInt(),
-                                  quantity: qty,
-                                  image:
-                                      mproductController.productd.value.image)
-                            },
-                        })
+                Padding(
+                  padding: EdgeInsets.only(bottom: 30, right: 20, left: 20),
+                  child: ComponentButtonPrimaryWithFunction(
+                      "Masukan Keranjang",
+                      () => {
+                            if (accountController
+                                    .account.value.email.value.isEmpty ==
+                                true)
+                              {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return XAlertDialog(
+                                      title: "Harap Login Terlebih Dahulu",
+                                      content:
+                                          "Untuk Melakukan Penambahan Keranjang",
+                                    );
+                                  },
+                                )
+                              }
+                            else
+                              {
+                                print(
+                                    "cust id ${accountController.account.value.idakun.value.toInt()})"),
+                                insertProduct(
+                                    custId: accountController
+                                        .account.value.idakun.value
+                                        .toInt(),
+                                    pid: mproductController.productd.value.id,
+                                    name: mproductController.productd.value.name
+                                        .toString(),
+                                    price: qty *
+                                        mproductController.productd.value.price
+                                            .toInt(),
+                                    quantity: qty,
+                                    image:
+                                        mproductController.productd.value.image)
+                              },
+                          }),
+                )
               ],
             );
           },

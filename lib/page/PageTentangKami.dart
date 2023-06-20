@@ -43,7 +43,7 @@ class AboutUsView extends StatelessWidget {
             context,
             question: 'Syarat Dan Ketentuan',
             answer:
-                '1. Kami berhak menggunakan foto Anda sebagai  bagian promosi kami. \n2. Diluar kecamatan Ambulu, Kab. Jember dikenakan   biaya transport. \n3. Uang yang telah ditransfer tidak dapat   dikembalikan kembali.',
+                '1. Kami berhak menggunakan foto Anda sebagai  bagian promosi kami. \n2. Diluar kecamatan Ambulu, Kab. Jember dikenakan   biaya transport.',
           ),
           _faq(
             context,

@@ -187,11 +187,6 @@ class _PageRingkasanBelanjaState extends State<PageRingkasanBelanja> {
                                       colorText: Colors.black,
                                       size: SizeApp.SizeTextHeader.sp,
                                     ),
-                                    ComponentTextPrimaryTittleBold(
-                                      teks: "X ${jumlahProduct}",
-                                      size: SizeApp.SizeTextHeader.sp,
-                                      colorText: Colors.black,
-                                    )
                                   ],
                                 ),
                               ),
@@ -490,29 +485,36 @@ class _PageRingkasanBelanjaState extends State<PageRingkasanBelanja> {
                   ComponentButtonPrimaryWithFunction(
                     "Order",
                     () => {
-                      order = Order(
-                        customerId: accountController.account.value.idakun.value
-                            .toInt(),
-                        name: accountController.account.value.username.value
-                            .toString(),
-                        number: accountController
-                            .account.value.phoneNumber.value
-                            .toInt(),
-                        email: accountController.account.value.email.value
-                            .toString(),
-                        method: _paymentMethodController.text.toString(),
-                        address: _addressController.text.toString(),
-                        totalProducts: jumlahProduct,
-                        totalPrice: totalHargaKeranjang,
-                        orderTime: getFormattedDateTime(),
-                        eventTime: textEditingController.text.toString(),
-                      ),
-                      order.submitOrder(),
-                      for (int i = 0; i < listKeranjang.length; i++)
-                        {deleteKeranjang(listKeranjang[i].id!.toInt())},
-                      Get.snackbar(
-                          "Pesanan Berhasil", "Berhasil Melakukan Order"),
-                      Get.toNamed(BaseNavigation.routeName.toString())
+                      if (_addressController.value.text.toString().isEmpty ||
+                          textEditingController.text.toString().isEmpty)
+                        {Get.snackbar("Mohon Maaf", "Data Tidak Boleh Kosong")}
+                      else
+                        {
+                          order = Order(
+                            customerId: accountController
+                                .account.value.idakun.value
+                                .toInt(),
+                            name: accountController.account.value.username.value
+                                .toString(),
+                            number: accountController
+                                .account.value.phoneNumber.value
+                                .toInt(),
+                            email: accountController.account.value.email.value
+                                .toString(),
+                            method: _paymentMethodController.text.toString(),
+                            address: _addressController.text.toString(),
+                            totalProducts: jumlahProduct,
+                            totalPrice: totalHargaKeranjang,
+                            orderTime: getFormattedDateTime(),
+                            eventTime: textEditingController.text.toString(),
+                          ),
+                          order.submitOrder(),
+                          for (int i = 0; i < listKeranjang.length; i++)
+                            {deleteKeranjang(listKeranjang[i].id!.toInt())},
+                          Get.snackbar(
+                              "Pesanan Berhasil", "Berhasil Melakukan Order"),
+                          Get.toNamed(BaseNavigation.routeName.toString())
+                        }
                     },
                     colorButton: ColorApp.primary,
                   ),
