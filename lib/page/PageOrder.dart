@@ -357,12 +357,12 @@ class _OrderItemState extends State<OrderItem> {
                                       Get.snackbar(
                                           "Notifikasi",
                                           widget.order.paymentStatus ==
-                                                  "Belum Lunas"
+                                                  "Belum lunas"
                                               ? "Mohon Order Kembali , Dana Yang Anda Transfer Akan Kami Kembalikan Segera."
                                               : "Harap Tunggu Validasi Pembayaran Dari Admin");
                                     },
                                     child: Text(widget.order.paymentStatus ==
-                                            "Belum Lunas"
+                                            "Belum lunas"
                                         ? "Harap Order Lagi"
                                         : "Upload Berhasil"))
                                 : ElevatedButton(
