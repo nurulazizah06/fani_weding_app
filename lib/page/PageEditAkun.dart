@@ -35,8 +35,6 @@ class _PageEditAkunState extends State<PageEditAkun> {
   final accountController = Get.put(AccountController());
 
   TextEditingController usernameController = TextEditingController();
-  TextEditingController passwordlamaController = TextEditingController();
-  TextEditingController passwordbaruController = TextEditingController();
   TextEditingController noTeleponController = TextEditingController();
   TextEditingController alamatController = TextEditingController();
 
@@ -46,6 +44,14 @@ class _PageEditAkunState extends State<PageEditAkun> {
     return Scaffold(
       body: ScreenUtilInit(
         builder: (context, child) {
+          usernameController.text =
+              accountController.account.value.username.value;
+          noTeleponController.text =
+              accountController.account.value.phoneNumber.value.toString();
+          emailController.text =
+              accountController.account.value.email.value.toString();
+          alamatController.text =
+              accountController.account.value.address.value.toString();
           return Padding(
             padding: EdgeInsets.only(left: 10.h, right: 10.h),
             child: ListView(
@@ -201,7 +207,8 @@ class _PageEditAkunState extends State<PageEditAkun> {
         idakun: id.toString(),
         username: name.toString(),
         email: email.toString(),
-        phoneNumber: number.toString());
+        phoneNumber: number.toString(),
+        address: address.toString());
     accountController.account.value = accounts;
     accountController.saveAccount();
     final customerData = {

@@ -72,7 +72,7 @@ class _PageAccountState extends State<PageAccount> {
                                             true
                                         ? "Nomor Telepon "
                                         : accountController
-                                            .account.value.username.value),
+                                            .account.value.phoneNumber.string),
                                 ComponentTextPrimaryTittleRegular(
                                     teks: accountController.account.value.email
                                                 .value.isEmpty ==

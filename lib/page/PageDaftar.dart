@@ -27,6 +27,7 @@ class _PageSignUpState extends State<PageSignUp> {
   TextEditingController usernameController = TextEditingController();
   TextEditingController noTeleponController = TextEditingController();
   TextEditingController kataSandiController = TextEditingController();
+  TextEditingController alamatController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +68,7 @@ class _PageSignUpState extends State<PageSignUp> {
                       teks: "Username",
                     ),
                     floatingLabelBehavior: FloatingLabelBehavior.auto,
-                    prefixIcon: Icon(Icons.email),
+                    prefixIcon: Icon(Icons.abc),
                     filled: true,
                     enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20.0),
@@ -125,7 +126,36 @@ class _PageSignUpState extends State<PageSignUp> {
                       teks: "Nomor Telepon",
                     ),
                     floatingLabelBehavior: FloatingLabelBehavior.auto,
-                    prefixIcon: Icon(Icons.email),
+                    prefixIcon: Icon(Icons.phone),
+                    filled: true,
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                        borderSide: BorderSide.none),
+                    disabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                        borderSide: BorderSide.none),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 10.h,
+                ),
+                TextField(
+                  controller: alamatController,
+                  onTap: () {
+                    setState(() {});
+                  },
+                  onChanged: (value) {
+                    // Handle email input
+                  },
+                  decoration: InputDecoration(
+                    label: ComponentTextPrimaryTittleRegular(
+                      teks: "Alamat",
+                    ),
+                    floatingLabelBehavior: FloatingLabelBehavior.auto,
+                    prefixIcon: Icon(Icons.my_location),
                     filled: true,
                     enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20.0),
@@ -186,7 +216,8 @@ class _PageSignUpState extends State<PageSignUp> {
                               usernameController.text.toString(),
                               emailController.text.toString(),
                               noTeleponController.text.toString(),
-                              kataSandiController.text.toString())
+                              kataSandiController.text.toString(),
+                              alamatController.text.toString())
                         }),
                 SizedBox(
                   height: 10.h,

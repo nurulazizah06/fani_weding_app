@@ -47,7 +47,8 @@ class _PageSignInState extends State<PageSignIn> {
           idakun: loginResponse.idakun,
           username: loginResponse.username,
           email: loginResponse.email,
-          phoneNumber: loginResponse.phoneNumber);
+          phoneNumber: loginResponse.phoneNumber,
+          address: loginResponse.address);
       accountController.account.value = accounts;
       accountController.saveAccount();
       Get.offAndToNamed(BaseNavigation.routeName.toString());

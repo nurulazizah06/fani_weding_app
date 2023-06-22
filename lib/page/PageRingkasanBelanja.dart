@@ -485,7 +485,7 @@ class _PageRingkasanBelanjaState extends State<PageRingkasanBelanja> {
                   ComponentButtonPrimaryWithFunction(
                     "Order",
                     () => {
-                      if (_addressController.value.text.toString().isEmpty ||
+                      if (_addressController.value.text.toString().isEmpty || 
                           textEditingController.text.toString().isEmpty)
                         {Get.snackbar("Mohon Maaf", "Data Tidak Boleh Kosong")}
                       else
