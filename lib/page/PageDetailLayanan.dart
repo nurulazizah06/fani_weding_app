@@ -32,10 +32,10 @@ class PageDetailLayanan extends StatefulWidget {
 class _PageDetailLayananState extends State<PageDetailLayanan> {
   final productController = Get.put(ProductController());
 
-  String imageUrl = 'http://${UtilApi.ipName}/product/';
+  String imageUrl = 'https://${UtilApi.ipName}/product/';
 
   Future<List<ModelKeranjang>> fetchKeranjangByCustId(String? custId) async {
-    final url = Uri.parse('http://${UtilApi.ipName}/api/keranjang/${custId}');
+    final url = Uri.parse('https://${UtilApi.ipName}/api/keranjang/${custId}');
     final response = await http.get(url);
     if (response.statusCode == 200) {
       List<dynamic> jsonList = json.decode(response.body);
@@ -50,7 +50,7 @@ class _PageDetailLayananState extends State<PageDetailLayanan> {
   Future<List<ProductResponse>> fetchProductsByCategory(
       String categoryName) async {
     final url = Uri.parse(
-        'http://${UtilApi.ipName}/api/products/category/$categoryName');
+        'https://${UtilApi.ipName}/api/products/category/$categoryName');
     print("Category Name = $categoryName");
     final response = await http.get(url);
     if (response.statusCode == 200) {

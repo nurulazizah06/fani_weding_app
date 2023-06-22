@@ -17,7 +17,7 @@ class CartItem extends StatefulWidget {
 
 class _CartItemState extends State<CartItem> {
   int qty = 0;
-  String imageUrl = 'http://${UtilApi.ipName}/product/';
+  String imageUrl = 'https://${UtilApi.ipName}/product/';
   @override
   Widget build(BuildContext context) {
     return Container(

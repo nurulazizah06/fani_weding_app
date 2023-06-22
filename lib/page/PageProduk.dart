@@ -33,10 +33,10 @@ class PageProduk extends StatefulWidget {
 
 // mengambil data produk menggunakan API
 class _PageProdukState extends State<PageProduk> {
-  String imageUrl = 'http://${UtilApi.ipName}/product/';
+  String imageUrl = 'https://${UtilApi.ipName}/product/';
 
   Future<List<ProductResponse>> fetchProductsByCategory() async {
-    final url = Uri.parse('http://${UtilApi.ipName}/api/products');
+    final url = Uri.parse('https://${UtilApi.ipName}/api/products');
 
     final response = await http.get(url);
     if (response.statusCode == 200) {
@@ -52,7 +52,7 @@ class _PageProdukState extends State<PageProduk> {
 
 // mengambil data keranjang menggunakan API
   Future<List<ModelKeranjang>> fetchKeranjangByCustId(String? custId) async {
-    final url = Uri.parse('http://${UtilApi.ipName}/api/keranjang/${custId}');
+    final url = Uri.parse('https://${UtilApi.ipName}/api/keranjang/${custId}');
     final response = await http.get(url);
     if (response.statusCode == 200) {
       List<dynamic> jsonList = json.decode(response.body);
@@ -110,7 +110,8 @@ class _PageProdukState extends State<PageProduk> {
                               child: RoundedSearchBar(), //search bar
                             ),
                             IconButton(
-                                onPressed: () => { //memberi fungsi ketika sesudah/sebelum login
+                                onPressed: () => {
+                                      //memberi fungsi ketika sesudah/sebelum login
                                       if (accountController.account.value.email
                                               .value.isEmpty ==
                                           true)
@@ -133,17 +134,20 @@ class _PageProdukState extends State<PageProduk> {
                                               .toString())
                                         }
                                     },
-                                icon: Stack(children: [ //icon keranjang
+                                icon: Stack(children: [
+                                  //icon keranjang
                                   HeroIcon(
                                     HeroIcons.shoppingCart,
                                     color: Colors.white,
                                   ),
-                                  Align( //memposisikan icon
+                                  Align(
+                                    //memposisikan icon
                                     alignment: Alignment.centerRight,
                                     child: Card(
                                       child: Padding(
                                         padding: const EdgeInsets.all(1.0),
-                                        child: Text( // memberi icon, jumlah list dalam keranjang
+                                        child: Text(
+                                          // memberi icon, jumlah list dalam keranjang
                                           "${listKeranjang.length}",
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
@@ -159,7 +163,8 @@ class _PageProdukState extends State<PageProduk> {
                         ),
                       ),
                     ),
-                    Padding( // memberi judul Produk
+                    Padding(
+                      // memberi judul Produk
                       padding: const EdgeInsets.all(8.0),
                       child: ComponentTextPrimaryTittleBold(
                         teks:
@@ -168,19 +173,25 @@ class _PageProdukState extends State<PageProduk> {
                         textAlign: TextAlign.start,
                       ),
                     ),
-                    Expanded( //membuat grid item
+                    Expanded(
+                        //membuat grid item
                         child: GridView.builder(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount( //menentukan tata letak
-                          crossAxisCount: 2, childAspectRatio: 0.8),
-                      itemCount: listProductByKategory!.length, //panjangnya sesuai jumlah produk
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          //menentukan tata letak
+                          crossAxisCount: 2,
+                          childAspectRatio: 0.8),
+                      itemCount: listProductByKategory!
+                          .length, //panjangnya sesuai jumlah produk
                       itemBuilder: (context, index) {
                         return GestureDetector(
-                          onTap: () { //action pada produk, menuju detail product
+                          onTap: () {
+                            //action pada produk, menuju detail product
                             Get.toNamed(ProductDetailView.routeName.toString());
                             productController.productd.value =
                                 listProductByKategory[index];
                           },
-                          child: Card( //memuat gambar product, diambil menggunakan API
+                          child: Card(
+                            //memuat gambar product, diambil menggunakan API
                             elevation: 0,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -205,7 +216,8 @@ class _PageProdukState extends State<PageProduk> {
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
-                                    children: [ //menampilkan kategori produk
+                                    children: [
+                                      //menampilkan kategori produk
                                       ComponentTextPrimaryDescriptionRegular(
                                         teks: listProductByKategory[index]
                                             .category
@@ -259,7 +271,8 @@ class _PageProdukState extends State<PageProduk> {
   }
 }
 
-class Product { //mendeklarasikan isi dari produk
+class Product {
+  //mendeklarasikan isi dari produk
   String? imageURL;
   String? desc;
   String? tittle;

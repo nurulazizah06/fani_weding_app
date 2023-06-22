@@ -34,9 +34,10 @@ class PageOrder extends StatefulWidget {
 
 class _PageOrderState extends State<PageOrder> {
   Future<List<ModelRiwayatOrder>> getOrderHistory(String name) async {
-    final url = Uri.parse('http://${UtilApi.ipName}/api/orders-show/$name');
+    final url = Uri.parse('https://${UtilApi.ipName}/api/orders-show/$name');
+    print("url $url");
     final response = await http.get(url);
-    print("http://${UtilApi.ipName}/orders-show/$name repsonse = " +
+    print("https://${UtilApi.ipName}/orders-show/$name repsonse = " +
         response.body);
     if (response.statusCode == 200) {
       final List<dynamic> jsonList = json.decode(response.body);
@@ -49,7 +50,7 @@ class _PageOrderState extends State<PageOrder> {
   }
 
   Future<List<ModelKeranjang>> fetchKeranjangByCustId(String? custId) async {
-    final url = Uri.parse('http://${UtilApi.ipName}/api/keranjang/${custId}');
+    final url = Uri.parse('https://${UtilApi.ipName}/api/keranjang/${custId}');
     final response = await http.get(url);
     if (response.statusCode == 200) {
       List<dynamic> jsonList = json.decode(response.body);
@@ -418,7 +419,7 @@ class _OrderItemState extends State<OrderItem> {
     final pickedImage = await picker.pickImage(source: ImageSource.gallery);
 
     if (pickedImage != null) {
-      var url = Uri.parse('http://${UtilApi.ipName}/api/orders-image');
+      var url = Uri.parse('https://${UtilApi.ipName}/api/orders-image');
 
       var request = http.MultipartRequest('PUT', url);
 
@@ -440,7 +441,7 @@ class _OrderItemState extends State<OrderItem> {
 Future<int> sendRequestWithFile(
     {String? id_order, File? file, String? custId}) async {
   var request = http.MultipartRequest(
-      'POST', Uri.parse("http://${UtilApi.ipName}/api/oderuploadtransaksi"));
+      'POST', Uri.parse("https://${UtilApi.ipName}/api/oderuploadtransaksi"));
 
   // tambahkan text sebagai field pada request
 

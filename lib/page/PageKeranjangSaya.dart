@@ -27,7 +27,7 @@ class ProductCartView extends StatefulWidget {
 
 class _ProductCartViewState extends State<ProductCartView> {
   Future<List<ModelKeranjang>> fetchKeranjangByCustId(String? custId) async {
-    final url = Uri.parse('http://${UtilApi.ipName}/api/keranjang/${custId}');
+    final url = Uri.parse('https://${UtilApi.ipName}/api/keranjang/${custId}');
     final response = await http.get(url);
     if (response.statusCode == 200) {
       List<dynamic> jsonList = json.decode(response.body);
@@ -42,10 +42,9 @@ class _ProductCartViewState extends State<ProductCartView> {
   List<ModelKeranjang> listKeranjang = [];
 
   Future<void> updateCart(ModelKeranjang modelKeranjang, String custId) async {
-    final String url = 'http://${UtilApi.ipName}/api/keranjangupdate';
-
+    final String url = 'https://${UtilApi.ipName}/api/keranjangupdate';
     Map<String, dynamic> data = {
-      'id': modelKeranjang.id,
+      'id': modelKeranjang.id.toString(),
       'customer_id': custId,
       'pid': modelKeranjang.pid,
       'name': modelKeranjang.name,
@@ -53,7 +52,7 @@ class _ProductCartViewState extends State<ProductCartView> {
       'quantity': modelKeranjang.quantity,
       'image': modelKeranjang.image,
     };
-
+    print("Data anjay $data");
     String jsonData = jsonEncode(data);
 
     final response = await http.put(
@@ -62,6 +61,7 @@ class _ProductCartViewState extends State<ProductCartView> {
       headers: {'Content-Type': 'application/json'},
     );
 
+    print("response cok ${response.body}");
     if (response.statusCode == 200) {
       // Update berhasil
       print('Cart updated successfully');
@@ -73,7 +73,7 @@ class _ProductCartViewState extends State<ProductCartView> {
 
   Future<void> deleteKeranjang(int id) async {
     final String url =
-        'http://${UtilApi.ipName}/api/keranjang_hapus/$id'; // Ganti dengan URL API Anda
+        'https://${UtilApi.ipName}/api/keranjang_hapus/$id'; // Ganti dengan URL API Anda
     final response = await http.delete(Uri.parse(url));
     if (response.statusCode == 200) {
       // Hapus berhasil
@@ -106,7 +106,7 @@ class _ProductCartViewState extends State<ProductCartView> {
   }
 
   final controllerAccount = Get.put(AccountController());
-  String imageUrl = 'http://${UtilApi.ipName}/product/';
+  String imageUrl = 'https://${UtilApi.ipName}/product/';
   @override
   Widget build(BuildContext context) {
     totalHargaKeranjang = 0;
@@ -208,21 +208,24 @@ class _ProductCartViewState extends State<ProductCartView> {
                                         ),
                                         onPressed: () {
                                           setState(() {
-                                            if (listKeranjang[index].quantity! >
+                                            if (listKeranjang[index]
+                                                    .quantity
+                                                    .toInt()! >
                                                 1) {
                                               int totQuality =
                                                   listKeranjang[index]
-                                                          .quantity! -
+                                                          .quantity
+                                                          .toInt()! -
                                                       1;
                                               int totHargaNow =
                                                   listKeranjang[index]
                                                           .productPrice!
                                                           .toInt() *
                                                       totQuality;
-                                              listKeranjang[index]
-                                                  .setQuantity(totQuality);
-                                              listKeranjang[index]
-                                                  .setPrice(totHargaNow);
+                                              listKeranjang[index].setQuantity(
+                                                  totQuality.toString());
+                                              listKeranjang[index].setPrice(
+                                                  totHargaNow.toString());
                                               updateCart(
                                                   listKeranjang[index],
                                                   controllerAccount
@@ -253,17 +256,19 @@ class _ProductCartViewState extends State<ProductCartView> {
                                         onPressed: () {
                                           setState(() {
                                             int totQuality =
-                                                listKeranjang[index].quantity! +
+                                                listKeranjang[index]
+                                                        .quantity
+                                                        .toInt()! +
                                                     1;
                                             int totHargaNow =
                                                 listKeranjang[index]
                                                         .productPrice!
                                                         .toInt() *
                                                     totQuality;
-                                            listKeranjang[index]
-                                                .setQuantity(totQuality);
-                                            listKeranjang[index]
-                                                .setPrice(totHargaNow);
+                                            listKeranjang[index].setQuantity(
+                                                totQuality.toString());
+                                            listKeranjang[index].setPrice(
+                                                totHargaNow.toString());
 
                                             updateCart(
                                                 listKeranjang[index],

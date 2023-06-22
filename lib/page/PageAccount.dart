@@ -19,7 +19,7 @@ class PageAccount extends StatefulWidget {
 
 class _PageAccountState extends State<PageAccount> {
   final accountController = Get.put(AccountController());
-  String imageUrl = 'http://${UtilApi.ipName}/product/';
+  String imageUrl = 'https://${UtilApi.ipName}/product/';
   @override
   Widget build(BuildContext context) {
     // TODO: implement build

@@ -40,7 +40,7 @@ class _ProductDetailViewState extends State<ProductDetailView> {
       int? price,
       int? quantity,
       String? image}) async {
-    final url = Uri.parse('http://${UtilApi.ipName}/api/keranjangtambah');
+    final url = Uri.parse('https://${UtilApi.ipName}/api/keranjangtambah');
 
     print("url $url");
     final response = await http.post(
@@ -72,7 +72,7 @@ class _ProductDetailViewState extends State<ProductDetailView> {
   static Future<void> register(String username, String email,
       String phoneNumber, String password) async {}
 
-  String imageUrl = 'http://${UtilApi.ipName}/product/';
+  String imageUrl = 'https://${UtilApi.ipName}/product/';
   @override
   Widget build(BuildContext context) {
     totalHarga = mproductController.productd.value.id!.toInt();

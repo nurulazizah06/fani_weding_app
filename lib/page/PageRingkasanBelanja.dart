@@ -48,7 +48,7 @@ class _PageRingkasanBelanjaState extends State<PageRingkasanBelanja> {
   TextEditingController _addressController = TextEditingController();
 
   Future<List<ModelKeranjang>> fetchKeranjangByCustId(String? custId) async {
-    final url = Uri.parse('http://${UtilApi.ipName}/api/keranjang/${custId}');
+    final url = Uri.parse('https://${UtilApi.ipName}/api/keranjang/${custId}');
     final response = await http.get(url);
     if (response.statusCode == 200) {
       List<dynamic> jsonList = json.decode(response.body);
@@ -90,6 +90,8 @@ class _PageRingkasanBelanjaState extends State<PageRingkasanBelanja> {
     totalHargaKeranjang = 0;
     jumlahProduct = 0;
     updateTotalHarga();
+    _addressController.text =
+        accountController.account.value.address.value.toString();
     return Scaffold(
       body: ScreenUtilInit(
         builder: (context, child) {
@@ -153,7 +155,6 @@ class _PageRingkasanBelanjaState extends State<PageRingkasanBelanja> {
                                       colorText: Colors.white,
                                       size: SizeApp.SizeTextHeader.sp,
                                     ),
-                                    
                                   ],
                                 );
                               },
@@ -195,7 +196,7 @@ class _PageRingkasanBelanjaState extends State<PageRingkasanBelanja> {
                                     backgroundColor:
                                         MaterialStatePropertyAll(Colors.white)),
                                 onPressed: () {
-                                  Get.toNamed(
+                                  Get.offAndToNamed(
                                       ProductCartView.routeName.toString());
                                 },
                                 child: ComponentTextPrimaryDescriptionRegular(
@@ -369,7 +370,9 @@ class _PageRingkasanBelanjaState extends State<PageRingkasanBelanja> {
                                   Icon(Icons.location_searching),
                                   address.isNullOrEmpty() == true
                                       ? ComponentTextPrimaryDescriptionBold(
-                                          teks: "Inputkan Alamat Anda",
+                                          teks: accountController
+                                              .account.value.address.value
+                                              .toString(),
                                           colorText: Colors.black,
                                           size: SizeApp.SizeTextHeader - 3.sp,
                                         )
@@ -480,7 +483,7 @@ class _PageRingkasanBelanjaState extends State<PageRingkasanBelanja> {
                   ComponentButtonPrimaryWithFunction(
                     "Order",
                     () => {
-                      if (_addressController.value.text.toString().isEmpty || 
+                      if (_addressController.value.text.toString().isEmpty ||
                           textEditingController.text.toString().isEmpty)
                         {Get.snackbar("Mohon Maaf", "Data Tidak Boleh Kosong")}
                       else
@@ -527,7 +530,7 @@ class _PageRingkasanBelanjaState extends State<PageRingkasanBelanja> {
 
   Future<void> deleteKeranjang(int id) async {
     final String url =
-        'http://${UtilApi.ipName}/api/keranjang_hapus/$id'; // Ganti dengan URL API Anda
+        'https://${UtilApi.ipName}/api/keranjang_hapus/$id'; // Ganti dengan URL API Anda
     final response = await http.delete(Uri.parse(url));
     if (response.statusCode == 200) {
       // Hapus berhasil
@@ -670,11 +673,16 @@ class _DateTextFieldState extends State<DateTextField> {
   }
 
   Future<void> _selectDate(BuildContext context) async {
+    final DateTime now = DateTime.now();
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: selectedDate,
-      firstDate: DateTime(1900),
+      firstDate: now,
       lastDate: DateTime(2100),
+      selectableDayPredicate: (DateTime date) {
+        // Mencegah pemilihan tanggal sebelum hari ini
+        return date.isAfter(now.subtract(Duration(days: 1)));
+      },
     );
 
     if (picked != null && picked != selectedDate) {
@@ -719,18 +727,17 @@ class _DateTextFieldState extends State<DateTextField> {
         widget.controller.text = formattedDateTime;
       },
       decoration: InputDecoration(
-        label: ComponentTextPrimaryTittleRegular(
-          teks: "Waktu Acara",
-        ),
-        floatingLabelBehavior: FloatingLabelBehavior.auto,
-        prefixIcon: Icon(Icons.calendar_today ),
+        labelText: "Waktu Acara",
+        prefixIcon: Icon(Icons.calendar_today),
         filled: true,
         enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20.0),
-            borderSide: BorderSide.none),
+          borderRadius: BorderRadius.circular(20.0),
+          borderSide: BorderSide.none,
+        ),
         disabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20.0),
-            borderSide: BorderSide.none),
+          borderRadius: BorderRadius.circular(20.0),
+          borderSide: BorderSide.none,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(20.0),
         ),

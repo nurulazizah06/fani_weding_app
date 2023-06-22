@@ -6,10 +6,10 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 class UtilApi {
-  static String? ipName = "192.168.111.1:8000";
+  static String? ipName = "wofy.my.id";
   static Future<LoginResponse> login(String email, String password) async {
     final url = Uri.parse(
-        'http://${UtilApi.ipName}/api/login'); // Ganti dengan URL endpoint login API Anda
+        'https://${UtilApi.ipName}/api/login'); // Ganti dengan URL endpoint login API Anda
 
     final response = await http.post(
       url,
@@ -28,7 +28,7 @@ class UtilApi {
 
   static Future<void> register(String username, String email,
       String phoneNumber, String password, String alamat) async {
-    final url = Uri.parse('http://${UtilApi.ipName}/api/register');
+    final url = Uri.parse('https://${UtilApi.ipName}/api/register');
 
     final response = await http.post(
       url,

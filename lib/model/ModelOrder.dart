@@ -29,7 +29,7 @@ class Order {
 
   Future<void> submitOrder() async {
     final String url =
-        'http://${UtilApi.ipName}/api/orders-add'; // Ganti dengan URL endpoint order di server Anda
+        'https://${UtilApi.ipName}/api/orders-add'; // Ganti dengan URL endpoint order di server Anda
 
     Map<String, String> headers = {'Content-Type': 'application/json'};
     Map<String, dynamic> data = {
@@ -43,7 +43,7 @@ class Order {
       'total_price': totalPrice,
       'order_time': orderTime,
       'event_time': eventTime,
-      'proof_payment' : "placeholder"
+      'proof_payment': "placeholder"
     };
 
     http.Response response = await http.post(

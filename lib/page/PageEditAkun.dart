@@ -218,7 +218,7 @@ class _PageEditAkunState extends State<PageEditAkun> {
       'address': address,
     };
     final url =
-        Uri.parse('http://${UtilApi.ipName}/api/customer_accounts-update/$id');
+        Uri.parse('https://${UtilApi.ipName}/api/customer_accounts-update/$id');
 
     final response = await http.put(
       url,

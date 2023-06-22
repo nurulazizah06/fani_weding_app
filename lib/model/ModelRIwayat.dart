@@ -1,13 +1,13 @@
 class ModelRiwayatOrder {
   int? id;
-  int? customerId;
+  String? customerId;
   String? name;
   String? number;
   String? email;
   String? method;
   String? address;
   String? totalProducts;
-  int? totalPrice;
+  String? totalPrice;
   String? orderTime;
   String? eventTime;
   String? orderStatus;

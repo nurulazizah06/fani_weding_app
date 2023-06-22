@@ -30,14 +30,14 @@ class PageTelusuriProduk extends StatefulWidget {
 }
 
 class _PageTelusuriProdukState extends State<PageTelusuriProduk> {
-  String imageUrl = 'http://${UtilApi.ipName}/product/';
+  String imageUrl = 'https://${UtilApi.ipName}/product/';
 
   Future<List<ProductResponse>> fetchProductsByName(String name) async {
     if (name == "") {
       name = "Paket";
     }
     final url =
-        Uri.parse('http://${UtilApi.ipName}/api/products/search/' + name);
+        Uri.parse('https://${UtilApi.ipName}/api/products/search/' + name);
     final response = await http.get(url);
     if (response.statusCode == 200) {
       print("response ${response.body}");
@@ -51,7 +51,7 @@ class _PageTelusuriProdukState extends State<PageTelusuriProduk> {
   }
 
   Future<List<ModelKeranjang>> fetchKeranjangByCustId(String? custId) async {
-    final url = Uri.parse('http://${UtilApi.ipName}/api/keranjang/${custId}');
+    final url = Uri.parse('https://${UtilApi.ipName}/api/keranjang/${custId}');
     final response = await http.get(url);
     if (response.statusCode == 200) {
       List<dynamic> jsonList = json.decode(response.body);
@@ -260,7 +260,8 @@ class RoundedSearchBarTelusuri extends StatelessWidget {
   TextEditingController? textEditing;
   @override
   Widget build(BuildContext context) {
-    return TextField( // search bar
+    return TextField(
+      // search bar
       controller: textEditing,
       decoration: InputDecoration(
         fillColor: Colors.white,
